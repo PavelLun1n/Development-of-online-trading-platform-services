@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marketplace</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+<header>
+    <div class="header-container">
+        <h1>Добро пожаловать на платформу для покупателей и продавцов</h1>
+
+        <form action="/search" method="get" class="search-form">
+            <input type="text" name="query" placeholder="Поиск товаров..." class="search-input">
+            <button type="submit" class="search-button">Найти</button>
+        </form>
+
+        <div class="login-button">
+            <a href="/login" class="login-link">Войти</a>
+        </div>
+    </div>
+    <nav>
+        <ul>
+            <li><a href="/">Главная</a></li>
+            <li><a href="/products">Товары</a></li>
+            <li><a href="/auctions">Аукционы</a></li>
+        </ul>
+    </nav>
+</header>
+
+<main>
+    <h2>Популярные товары</h2>
+
+    <div class="product-list">
+        <div th:each="product : ${products}" class="product-card">
+            <h3 th:text="${product.name}">Название</h3>
+            <img th:src="@{${product.imageUrl}}" alt="Картинка товара" class="product-image"/>
+            <p th:text="${product.description}">Описание</p>
+            <p>Цена: <span th:text="${product.price}">0.00</span> ₽</p>
+            <p>Остаток: <span th:text="${product.stock}">0</span> шт.</p>
+        </div>
+    </div>
+
+</main>
+
+<footer>
+    <p>&copy; 2025 Marketplace</p>
+</footer>
+
+<script src="/js/script.js"></script>
+</body>
+</html>
