@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Корзина — Marketplace</title>
+    <link rel="stylesheet" href="/css/styles.css"/>
+</head>
+<body>
+<header>
+    <h1>Ваша корзина</h1>
+    <nav>
+        <a href="/" class="back-link">← Главная</a>
+        <!-- Очистить корзину, если есть товары -->
+        <form th:if="${!#maps.isEmpty(items)}"
+              th:action="@{/cart/clear}"
+              method="post"
+              style="display:inline;">
+            <!-- Только если _csrf не null -->
+            <input th:if="${_csrf != null}"
+                   type="hidden"
+                   th:name="${_csrf.parameterName}"
+                   th:value="${_csrf.token}"/>
+            <button type="submit" class="clear-link">Очистить корзину</button>
+        </form>
+    </nav>
+</header>
+
+<main>
+    <div th:if="${#maps.isEmpty(items)}">
+        <p>Корзина пуста.</p>
+    </div>
+
+    <div th:unless="${#maps.isEmpty(items)}">
+        <table>
+            <thead>
+            <tr>
+                <th>Товар</th>
+                <th>Кол-во</th>
+                <th>Цена</th>
+                <th>Сумма</th>
+                <th>Действие</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="entry : ${items}">
+                <td th:text="${entry.key.name}">Название</td>
+                <td th:text="${entry.value}">1</td>
+                <td th:text="${entry.key.price}">0.00</td>
+                <td th:text="${entry.key.price * entry.value}">0.00</td>
+                <td>
+                    <form th:action="@{/cart/remove/{id}(id=${entry.key.id})}"
+                          method="post">
+                        <input th:if="${_csrf != null}"
+                               type="hidden"
+                               th:name="${_csrf.parameterName}"
+                               th:value="${_csrf.token}"/>
+                        <button type="submit">–</button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <p>Итого: <strong th:text="${total}">0.00</strong> ₽</p>
+
+        <!-- Форма оформления заказа -->
+        <a th:href="@{/cart/checkout}" class="buy-button">Оформить заказ</a>
+    </div>
+</main>
+
+<footer>
+    <p>&copy; 2025 Marketplace</p>
+</footer>
+</body>
+</html>
