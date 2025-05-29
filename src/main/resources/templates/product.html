@@ -9,18 +9,8 @@
 <body>
 <header>
     <div class="header-container">
-        <h1>Marketplace</h1>
-
-        <form action="/search" method="get" class="search-form">
-            <input
-                    type="text"
-                    name="query"
-                    placeholder="Поиск товаров..."
-                    class="search-input"
-                    th:value="${query}"
-            />
-            <button type="submit" class="search-button">Найти</button>
-        </form>
+        <!-- Можно добавить форму поиска или просто оставить пустым -->
+        <div class="header-placeholder"></div>
 
         <div class="header-actions">
             <a href="/cart" class="cart-link">
@@ -41,11 +31,10 @@
     <nav>
         <ul>
             <li><a href="/">Главная</a></li>
-            <li><a href="/products">Товары</a></li>
-            <li><a href="/auctions">Аукционы</a></li>
         </ul>
     </nav>
 </header>
+
 
 <main>
     <div class="product-detail-card">

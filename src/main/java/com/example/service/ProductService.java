@@ -4,6 +4,7 @@ import com.example.model.Product;
 import com.example.model.User;
 import com.example.repository.ProductRepository;
 import com.example.repository.UserRepository;
+import jakarta.annotation.PostConstruct;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
@@ -19,6 +20,7 @@ import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ProductService {
@@ -124,6 +126,24 @@ public class ProductService {
         q.setMaxResults(limit);
         return q.getResultList();
     }
+    public List<Product> getProductsByCategory(String category) {
+        return productRepository.findByCategoryCode(category);
+    }
+
+    public List<String> getAllCategoryCodes() {
+        return productRepository.findAll()
+                .stream()
+                .map(Product::getCategoryCode)
+                .distinct()
+                .collect(Collectors.toList());
+    }
+    @PostConstruct
+    public void debugCategories() {
+        List<String> cats = getAllCategoryCodes();
+        System.out.println("Категории в БД: " + cats);
+    }
+
+
 
 
 }

@@ -8,7 +8,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "user_actions")
+@Table(name = "user_action")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -28,18 +28,6 @@ public class UserAction {
 
     @Column(name = "product_id", nullable = false)
     private Long productId;
-
-    @Column(name = "category_id", nullable = false)
-    private Long categoryId;
-
-    @Column(name = "category_code")
-    private String categoryCode;
-
-    @Column
-    private String brand;
-
-    @Column(nullable = false)
-    private BigDecimal price;
 
     @Column(name = "user_id", nullable = false)
     private Long userId;

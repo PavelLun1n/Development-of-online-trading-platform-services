@@ -9,8 +9,6 @@
 <body>
 <header>
     <div class="header-container">
-        <h1>Добро пожаловать на платформу для покупателей и продавцов</h1>
-        <!-- Форма поиска теперь отправляет GET на "/", контроллер обрабатывает параметр query -->
         <form action="/" method="get" class="search-form">
             <input
                     type="text"
@@ -20,56 +18,48 @@
                     th:value="${query}"
             />
             <button type="submit" class="search-button">Найти</button>
-            <!-- Крестик для сброса поиска, виден только если query не пуст -->
             <a th:if="${query}" href="/" class="search-reset" title="Сбросить поиск">✕</a>
         </form>
         <div class="header-actions">
             <a href="/cart" class="cart-link" title="Перейти в корзину">🛒 Корзина</a>
             <a href="/login" class="login-link">Войти</a>
         </div>
-
     </div>
-    <nav>
-        <ul>
-            <li><a href="/">Главная</a></li>
-            <li><a href="/products">Товары</a></li>
-            <li><a href="/auctions">Аукционы</a></li>
-        </ul>
-    </nav>
+
+    <div class="category-tabs">
+        <div class="dropdown">
+            <a th:href="@{/}"
+               class="dropdown-button"
+               th:classappend="${selectedCategory == null} ? ' active' : ''">Все ▾</a>
+            <div class="dropdown-content">
+                <a th:each="cat : ${categories}"
+                   th:href="@{/(category=${cat})}"
+                   th:text="${cat}"
+                   th:classappend="${selectedCategory == cat ? ' active' : ''}">
+                </a>
+            </div>
+        </div>
+    </div>
+
 </header>
 
 <main>
-    <!-- Заголовок в зависимости от наличия поиска -->
     <h2 th:if="${query == null}">Популярные товары</h2>
     <h2 th:if="${query != null}">
         Результаты поиска по «<span th:text="${query}">…</span>»
     </h2>
 
     <div class="product-list">
-        <!-- Сообщение, если нет результатов -->
         <div th:if="${#lists.isEmpty(products)}" class="no-results">
             <p>По вашему запросу ничего не найдено.</p>
         </div>
-        <!-- Карточки товаров -->
         <div th:each="product : ${products}" class="product-card">
             <a th:href="@{/products/{id}(id=${product.id})}" class="product-link">
                 <h3 th:text="${product.name}">Название</h3>
-                <img
-                        th:src="@{${product.imageUrl}}"
-                        alt="Картинка товара"
-                        class="product-image"
-                />
+                <img th:src="@{${product.imageUrl}}" alt="Картинка товара" class="product-image" />
                 <p th:text="${product.description}">Описание</p>
-                <p>
-                    Цена:
-                    <span th:text="${product.price}">0.00</span>
-                    ₽
-                </p>
-                <p>
-                    Остаток:
-                    <span th:text="${product.stock}">0</span>
-                    шт.
-                </p>
+                <p>Цена: <span th:text="${product.price}">0.00</span> ₽</p>
+                <p>Остаток: <span th:text="${product.stock}">0</span> шт.</p>
             </a>
         </div>
     </div>

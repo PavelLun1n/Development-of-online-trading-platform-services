@@ -1,12 +1,16 @@
     package com.example.restController;
 
+    import com.example.entity.enums.EventType;
     import com.example.model.User;
+    import com.example.model.UserAction;
     import com.example.service.UserService;
+    import com.example.service.UserActionService;
     import org.springframework.beans.factory.annotation.Autowired;
     import org.springframework.http.MediaType;
     import org.springframework.web.bind.annotation.*;
     import org.springframework.web.servlet.view.RedirectView;
 
+    import java.time.LocalDateTime;
     import java.util.List;
 
     @RestController
@@ -14,10 +18,12 @@
     public class UserController {
 
         private final UserService userService;
+        private final UserActionService userActionService;
 
         @Autowired
-        public UserController(UserService userService) {
+        public UserController(UserService userService, UserActionService userActionService) {
             this.userService = userService;
+            this.userActionService = userActionService;
         }
 
         @PostMapping("/register")
@@ -28,9 +34,22 @@
 
         @PostMapping("/login")
         public RedirectView login(@RequestBody User user) {
-            userService.authenticate(user);
+            User authenticatedUser = userService.authenticate(user);
+
+            // Логируем событие "вход в систему"
+            UserAction loginAction = UserAction.builder()
+                    .eventTime(LocalDateTime.now())
+                    .eventType(EventType.view) // Или введи новый тип "login"
+                    .productId(0L) // Не к товару относится
+                    .userId(authenticatedUser.getId())
+                    .userSession("session-" + authenticatedUser.getId()) // Или реальную UUID-сессию
+                    .build();
+
+            userActionService.saveAction(loginAction);
+
             return new RedirectView("http://localhost:8080");
         }
+
 
         @GetMapping("/{id}")
         public User getUserProfile(@PathVariable Long id) {
