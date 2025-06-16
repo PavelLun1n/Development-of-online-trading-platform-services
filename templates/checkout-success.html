@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Заказ оформлен — Marketplace</title>
+    <link rel="stylesheet" href="/css/styles.css"/>
+</head>
+<body>
+<header>
+    <div class="header-container">
+        <h1>Спасибо за заказ!</h1>
+        <nav>
+            <a href="/" class="back-link">← На главную</a>
+        </nav>
+    </div>
+</header>
+
+<main>
+    <p th:text="${message}">Ваш заказ оформлен!</p>
+</main>
+
+</body>
+</html>

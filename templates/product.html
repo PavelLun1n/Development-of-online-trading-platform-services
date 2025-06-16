@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title th:text="${product.name} + ' — Marketplace'">Товар</title>
+    <link rel="stylesheet" href="/css/styles.css"/>
+</head>
+<body>
+<header>
+    <div class="header-container">
+        <!-- Можно добавить форму поиска или просто оставить пустым -->
+        <div class="header-placeholder"></div>
+
+        <div class="header-actions">
+            <a href="/cart" class="cart-link">
+                🛒 Корзина
+                <span th:if="${cartSize > 0}" th:text="'(' + ${cartSize} + ')'"></span>
+            </a>
+
+            <div th:if="${session.user == null}">
+                <a href="/login" class="login-link">Войти</a>
+            </div>
+            <div th:if="${session.user != null}">
+                <span th:text="${session.user.username}">Пользователь</span>
+                <a href="/logout" class="login-link">Выйти</a>
+            </div>
+        </div>
+    </div>
+
+    <nav>
+        <ul>
+            <li><a href="/">Главная</a></li>
+        </ul>
+    </nav>
+</header>
+
+
+<main>
+    <div class="product-detail-card">
+        <div class="detail-card-header">
+            <h2 th:text="${product.name}">Название товара</h2>
+        </div>
+
+        <div class="detail-card-body">
+            <div class="image-wrapper">
+                <img
+                        th:src="@{${product.imageUrl}}"
+                        alt="Картинка товара"
+                        class="detail-image"
+                />
+            </div>
+            <div class="info-wrapper">
+                <p><strong>Описание:</strong></p>
+                <p th:text="${product.description}">Описание товара...</p>
+                <p>
+                    <strong>Цена:</strong>
+                    <span th:text="${product.price}">0.00</span> ₽
+                </p>
+                <p>
+                    <strong>В наличии:</strong>
+                    <span th:text="${product.stock}">0</span> шт.
+                </p>
+            </div>
+        </div>
+
+        <div class="detail-card-footer">
+            <div th:if="${session.user != null}">
+                <form th:action="@{/cart/add/{id}(id=${product.id})}" method="post">
+                    <button type="submit" class="buy-button">Добавить в корзину</button>
+                </form>
+            </div>
+            <div th:if="${session.user == null}">
+                <a href="/login" class="buy-button" style="background-color:#f44336;">
+                    Войдите, чтобы добавить
+                </a>
+            </div>
+
+            <a href="/" class="back-link">← Назад к списку</a>
+        </div>
+    </div>
+</main>
+
+<footer>
+    <p>&copy; 2025 Marketplace</p>
+</footer>
+</body>
+</html>
